@@ -1,10 +1,27 @@
 #coding=utf-8
 
+import json
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 
 class Voto:
 
     votos = []
+
+    def leerVotos(self):
+        with open("votos.json") as f:
+            lista = json.load(f)
+
+            for e in lista:
+                self.votos.append(e)
+            print self.votos
+
+
+    def guardarVotos(self):
+        print "GUARDANDO..."
+        with open("votos.json","w") as f:
+            json.dump(self.votos, f, indent=4)
+        print "GUARDADO"
+
 
     def iniciarVoto(self,idUsuario):
 
@@ -16,8 +33,6 @@ class Voto:
                            },
                            "votado":[]
                            })
-
-
 
 
     def finder(self, idUsuario):
@@ -41,11 +56,11 @@ class Voto:
                      InlineKeyboardButton("Lunes", callback_data=" "),
                      InlineKeyboardButton("Martes", callback_data=" ")],
 
-                   [InlineKeyboardButton("🕗 08:00", callback_data=" ")],
+                   [InlineKeyboardButton("08:00", callback_data=" ")],
 
-                   [InlineKeyboardButton("🕙 10:00", callback_data=" ")],
+                   [InlineKeyboardButton("10:00", callback_data=" ")],
 
-                   [InlineKeyboardButton("🕛 12:00", callback_data=" ")],
+                   [InlineKeyboardButton("12:00", callback_data=" ")],
 
                    [InlineKeyboardButton("ENVIAR 📤", callback_data="enviar_voto"),
                     InlineKeyboardButton("AYUDA 🆘", url="google.com")]
@@ -84,3 +99,26 @@ class Voto:
                               text = msg,
                               parse_mode = ParseMode.MARKDOWN,
                               reply_markup = InlineKeyboardMarkup(keyboard))
+
+
+    def actualizarVoto(self, posicion, idUsuario):
+        """Este metodo actualiza el valor de la posición indicada para el voto de la perosna indicada"""
+
+        indVoto = self.finder(idUsuario)
+
+        valorAnterior = self.votos[indVoto]["voto"][posicion]
+        valorNuevo = valorAnterior
+
+        while True:
+            if valorNuevo == 9:
+                valorNuevo = 0  # hacemos overflow
+            else:
+                valorNuevo = valorNuevo + 1
+
+            if valorNuevo not in self.votos[indVoto]["votado"]:
+                self.votos[indVoto]["voto"][posicion] = valorNuevo
+                if valorNuevo != 0:
+                    self.votos[indVoto]["votado"].append(valorNuevo)
+                if valorAnterior in self.votos[indVoto]["votado"]:
+                    self.votos[indVoto]["votado"].remove(valorAnterior)
+                return True

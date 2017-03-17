@@ -15,13 +15,18 @@ class Handler:
         update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup(keyboard))
 
 
-
     def InlinekeyboardCallback(self, bot, update):
+        print "RECIBIDO"
+
         data = update.callback_query.data
+        idUsuario = update.callback_query.from_user.id
 
         if data == "iniciar_voto":
             bot.answer_callback_query(update.callback_query.id, "OK")
-            Voto().iniciarVoto(update.callback_query.from_user.id)
+            Voto().iniciarVoto(idUsuario)
+            Voto().mensajeVotar(bot, update)
+        elif data.count("-") == 1:
+            Voto().actualizarVoto(data, idUsuario)
             Voto().mensajeVotar(bot, update)
         else:
             bot.answer_callback_query(update.callback_query.id, data)
