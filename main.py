@@ -16,10 +16,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 Voto().leerVotos() # LEEMOS LOS VOTOS GUARDADOS ANTERIORMENTE
 
 
-
-print Voto().votos
-
-
 """DECLARANDO HANDLERS"""
 handler = CommandHandler("start", Handler().start)
 dispatcher.add_handler(handler)

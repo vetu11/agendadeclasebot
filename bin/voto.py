@@ -13,7 +13,6 @@ class Voto:
 
             for e in lista:
                 self.votos.append(e)
-            print self.votos
 
 
     def guardarVotos(self):
@@ -25,14 +24,15 @@ class Voto:
 
     def iniciarVoto(self,idUsuario):
 
-        self.votos.append({"id":idUsuario,
-                           "voto":{
-                               "1-1":0,"1-2":0,"1-3":0,"1-4":0,
-                               "2-1":0,"2-2":0,"2-3":0,"2-4":0,
-                               "3-1":0,"3-2":0,"3-3":0,"3-4":0
-                           },
-                           "votado":[]
-                           })
+        if self.finder(idUsuario) == None:
+            self.votos.append({"id":idUsuario,
+                               "voto":{
+                                   "1-1":0,"1-2":0,"1-3":0,"1-4":0,
+                                   "2-1":0,"2-2":0,"2-3":0,"2-4":0,
+                                   "3-1":0,"3-2":0,"3-3":0,"3-4":0
+                               },
+                               "votado":[]
+                               })
 
 
     def finder(self, idUsuario):
@@ -89,7 +89,9 @@ class Voto:
 
     def mensajeVotar(self, bot, update):
 
-        msg = "Pulsa los botones para votar."
+        msg = "Pulsa los botones para votar.\n*LEYENDA:*\n⭕️ - vacío\n1️⃣ - HISTORIA\n2️⃣-INGLÉS\n3️⃣-QUÍMICA\n4️⃣-FILOSOFÍA" \
+              "\n5️⃣ - FÍSICA / ECONMÍA / GRIEGO\n6️⃣ - GEOGRAFÍA / DIBUJO TÉCNICO\n7️⃣ - BIOLOGÍA / HISTORIA DEL ARTE\n8️⃣ " \
+              "- MATES / LATÍN\n9️⃣ - LENGUA"
 
         keyboard = self.generarTeclado(update.callback_query.from_user.id)
 
