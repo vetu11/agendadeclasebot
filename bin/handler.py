@@ -23,3 +23,5 @@ class Handler:
             bot.answer_callback_query(update.callback_query.id, "OK")
             Voto().iniciarVoto(update.callback_query.from_user.id)
             Voto().mensajeVotar(bot, update)
+        else:
+            bot.answer_callback_query(update.callback_query.id, data)
